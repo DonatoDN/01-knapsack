@@ -1,6 +1,8 @@
 # Exercice https://courses.21-learning.com/runestone/books/published/oci-2224-donc/classic-problems/01-knapsack-short.html#force-brute
 
 from knapsack import KnapsackInstance, KnapsackSolver
+from itertools import product
+
 
 class BruteforceKnapsackSolver(KnapsackSolver):
     """
@@ -18,13 +20,36 @@ class BruteforceKnapsackSolver(KnapsackSolver):
 
     """
     
-    def __init__(self, instance) -> None:
+    def __init__(self, instance:KnapsackInstance) -> None:
         # TODO: write the constructor by calling the parent class constructor
-        ...
+        super().__init__(instance)
+        self.weight = None
+        self.value = None
+        self._inst = instance
 
     
     def solve(self) -> tuple[int, ...]:
-        # solve by brute force
-        sol = (0,)
         
-        return sol
+        possibilities = list(product([0,1], repeat = self._inst.size))
+        Xopt = None
+        v_Xopt = 0
+        w_Xopt = 0
+
+
+        w = 0
+        v = 0
+
+        for pos in possibilities:
+            for i,x in enumerate(pos) :
+                w += self._inst.W[i] * x
+                v += self._inst.V[i] * x
+
+                if w <= self._inst.C:
+                    if v > v_Xopt:
+                        v_Xopt = v
+                        w_Xopt = w
+                        Xopt = pos
+        
+        self.weight = w_Xopt
+        self.value = v_Xopt
+        return Xopt

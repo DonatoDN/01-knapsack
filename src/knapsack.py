@@ -86,6 +86,8 @@ class KnapsackSolver:
         return sum(v * x for v, x in zip(self._inst.V, X))
 
 
+
+
 try:
     import doctest
 
